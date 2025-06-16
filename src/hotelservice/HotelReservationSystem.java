@@ -39,13 +39,13 @@ public class HotelReservationSystem {
 
                 switch (choice) {
                     case 1:
-                        reserveRoom(connection, scanner, statement);
+                        reserveRoom(scanner, statement);
                         break;
                     case 2:
-                        viewReservation(connection, scanner, statement);
+                        viewReservation(statement);
                         break;
                     case 3:
-                        getRoomNumber(connection, scanner, statement);
+                        getRoomNumber(scanner, statement);
                         break;
                     case 4:
                         updateReservation(connection, scanner, statement);
@@ -73,7 +73,7 @@ public class HotelReservationSystem {
     }
 
 
-    private static void reserveRoom(Connection connection, Scanner scanner, Statement statement) {
+    private static void reserveRoom(Scanner scanner, Statement statement) {
         try {
             System.out.println("Enter Room Number");
             int roomNumber = scanner.nextInt();
@@ -98,11 +98,11 @@ public class HotelReservationSystem {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
-    private static void viewReservation(Connection connection, Scanner scanner, Statement statement) throws SQLException {
+    private static void viewReservation(Statement statement) throws SQLException {
         String sql = "SELECT reservation_id, guest_name, room_number, contact_number, reservation_date FROM reservations;";
         try {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -129,7 +129,7 @@ public class HotelReservationSystem {
     }
 
 
-    private static void getRoomNumber(Connection connection, Scanner scanner, Statement statement) {
+    private static void getRoomNumber(Scanner scanner, Statement statement) {
         try {
             System.out.println("Enter Reservation Id: ");
             int reservationId = scanner.nextInt();
@@ -161,7 +161,7 @@ public class HotelReservationSystem {
             int reservationId = scanner.nextInt();
             scanner.nextLine();
 
-            if (!reservationExists(connection, reservationId,statement)) {
+            if (!reservationExists(reservationId, statement)) {
                 System.out.println("Reservation not found for the given ID.");
                 return;
             }
@@ -186,6 +186,7 @@ public class HotelReservationSystem {
                 else
                     System.out.println("Reservation updated failed.");
             } catch (Exception e) {
+                e.printStackTrace();
             }
 
         } catch (Exception e) {
@@ -197,7 +198,7 @@ public class HotelReservationSystem {
         System.out.println("Enter Reservation ID: ");
         int reservationID = scanner.nextInt();
 
-        if (!reservationExists(connection, reservationID,statement)) {
+        if (!reservationExists(reservationID, statement)) {
             System.out.println("Reservation not found for the given ID.");
             return;
         }
@@ -215,7 +216,7 @@ public class HotelReservationSystem {
         }
     }
 
-    private static boolean reservationExists(Connection connection, int reservationId, Statement statement) {
+    private static boolean reservationExists(int reservationId, Statement statement) {
         try {
             String sql = "SELECT reservation_id FROM reservations Where reservation_id = " + reservationId;
 
@@ -228,10 +229,11 @@ public class HotelReservationSystem {
         }
 
     }
-    public static void exit() throws InterruptedException{
+
+    public static void exit() throws InterruptedException {
         System.out.print("Exiting System");
         int i = 5;
-        while(i!=0){
+        while (i != 0) {
             System.out.print(".");
             Thread.sleep(400);
             i--;
