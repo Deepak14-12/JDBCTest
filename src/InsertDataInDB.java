@@ -1,11 +1,11 @@
 import java.sql.*;
 
-public class JDBCBasic {
+public class InsertDataInDB {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/jdbc";
         String username = "root";
         String password = "root";
-        String query = "select * from employee;";
+        String query = "insert into employee values(4,'rony','developer',56000.0);";
 
         try {
             //load drivers
@@ -14,26 +14,18 @@ public class JDBCBasic {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-//establish connection with  db
+         //establish connection with db
         try {
             Connection con = DriverManager.getConnection(url, username, password);
             System.out.println("connection established ");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String job = rs.getString("job");
-                double salary = rs.getDouble("salary");
-                System.out.println();
-                System.out.println("-------------------------");
-                System.out.println("ID = " + id);
-                System.out.println("Name: " + name);
-                System.out.println("job: " + job);
-                System.out.println("Salary: " + salary);
+            int rowsAffected = st.executeUpdate(query);
+            if (rowsAffected > 0) {
+                System.out.println("insert successfull. " + rowsAffected + "row(s) affected.");
+            } else {
+                System.out.println("insertion failed.");
             }
-            rs.close();
+
             st.close();
             con.close();
             System.out.println("connection closed successfully");

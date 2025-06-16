@@ -1,12 +1,16 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class JDBCBasic {
+public class DeleteFromDB {
     public static void main(String[] args) {
+// setting database
         String url = "jdbc:mysql://localhost:3306/jdbc";
         String username = "root";
         String password = "root";
-        String query = "select * from employee;";
-
+//        String query = "delete  from employee where id = 4";
+        String query1 = "UPDATE employee SET salary = 10000000 WHERE id = 3";
         try {
             //load drivers
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -14,26 +18,21 @@ public class JDBCBasic {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-//establish connection with  db
+        //establish connection with db and perform operations
         try {
             Connection con = DriverManager.getConnection(url, username, password);
             System.out.println("connection established ");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String job = rs.getString("job");
-                double salary = rs.getDouble("salary");
-                System.out.println();
-                System.out.println("-------------------------");
-                System.out.println("ID = " + id);
-                System.out.println("Name: " + name);
-                System.out.println("job: " + job);
-                System.out.println("Salary: " + salary);
+//            int rowsAffected = st.executeUpdate(query);
+            int rowsAffected = st.executeUpdate(query1);
+            if (rowsAffected > 0) {
+//                System.out.println("deletion successfull. " + rowsAffected + "row(s) affected.");
+                System.out.println("Updation successfull. " + rowsAffected + "row(s) affected.");
+            } else {
+//                System.out.println("deletion failed.");
+                System.out.println("Updation failed.");
             }
-            rs.close();
+
             st.close();
             con.close();
             System.out.println("connection closed successfully");
